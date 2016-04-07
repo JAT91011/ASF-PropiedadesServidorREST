@@ -11,7 +11,9 @@ import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
 
+import dao.Actividad;
 import dao.Cliente;
+import dao.Propiedad;
 
 public class Test {
 
@@ -50,8 +52,8 @@ public class Test {
 
 		// OBTENEMOS TODOS LOS CLIENTES DE LA BASE DE DATOS Y LOS MOSTRAMOS
 		System.out.println("\nVISUALIZAMOS TODOS LOS CLIENTES DE LA BASE DE DATOS");
-		Cliente[] array = service.path("rest").path("clientes").get(Cliente[].class);
-		for (Cliente c : array) {
+		Cliente[] arrayClientes = service.path("rest").path("clientes").get(Cliente[].class);
+		for (Cliente c : arrayClientes) {
 			System.out.println(c.toString());
 		}
 
@@ -75,5 +77,31 @@ public class Test {
 		System.out.println("\nELIMINAMOS EL CLIENTE DE PRUEBA");
 		service.path("rest").path("clientes").path(Integer.toString(cl3.getDni())).delete();
 		System.out.println("Cliente '" + cl3.getNombre() + "' borrado correctamente de la base de datos.");
+
+		// OBTENEMOS TODAS LAS ACTIVIDADES DE LA BASE DE DATOS Y LAS MOSTRAMOS
+		System.out.println("\nVISUALIZAMOS TODAS LAS ACTIVIDADES DE LA BASE DE DATOS");
+		Actividad[] arrayActividades = service.path("rest").path("actividades").get(Actividad[].class);
+		for (Actividad a : arrayActividades) {
+			System.out.println(a.toString());
+		}
+
+		// OBTENEMOS TODAS LAS ACTIVIDADES DE LA PROPIEDAD CON ID 1
+		System.out.println("\nVISUALIZAMOS TODAS LAS ACTIVIDADES DE LA PROPIEDAD CON ID 1");
+		Actividad[] arrayActividadesPorProp = service.path("rest").path("actividades").path("1").get(Actividad[].class);
+		for (Actividad a : arrayActividadesPorProp) {
+			System.out.println(a.toString());
+		}
+
+		// OBTENEMOS TODAS LAS PROPIEDADES Y LAS MOSTRAMOS
+		System.out.println("\nVISUALIZAMOS TODAS LAS PROPIEDADES DE LA BASE DE DATOS");
+		Propiedad[] arrayPropiedades = service.path("rest").path("propiedades").get(Propiedad[].class);
+		for (Propiedad p : arrayPropiedades) {
+			System.out.println(p.toString());
+		}
+
+		// OBTENEMOS LA PROPIEDAD CON ID 1 Y LA MOSTRAMOS
+		System.out.println("\nVISUALIZAMOS LA PROPIEDAD CON ID 1");
+		Propiedad propiedad = service.path("rest").path("propiedades").path("1").get(Propiedad.class);
+		System.out.println(propiedad.toString());
 	}
 }
