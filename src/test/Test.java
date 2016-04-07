@@ -67,7 +67,7 @@ public class Test {
 		}
 
 		// OBTENEMOS EL CLIENTE EDITADO Y LO MOSTRAMOS
-		System.out.println("\nMOSTRAMOS LOS DATOS DEL CLIENTE 'ENDIKA' TRAS LA EDICIÓN");
+		System.out.println("\nMOSTRAMOS LOS DATOS DEL CLIENTE 'ENDIKA' TRAS LA EDICION");
 		cl1 = service.path("rest").path("clients").path(Integer.toString(cl1.getDni())).get(Cliente.class);
 		System.out.println(cl1.toString());
 

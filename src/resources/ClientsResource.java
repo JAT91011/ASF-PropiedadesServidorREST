@@ -64,7 +64,6 @@ public class ClientsResource {
 							+ client.getEmail() + "', '" + client.getDireccion() + "', " + client.getCodigoPostal() + ", " + client.getTelefono()
 							+ ")");
 		}
-
 		Database.getInstance().disconnect();
 		return res;
 	}
