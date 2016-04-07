@@ -15,14 +15,14 @@ import javax.ws.rs.core.UriInfo;
 
 import com.sun.jersey.api.NotFoundException;
 
-import entities.Cliente;
+import dao.Cliente;
 import utilities.Database;
 
-public class ClientResource {
+public class ClienteResource {
 
 	private int dni;
 
-	public ClientResource(String dni) {
+	public ClienteResource(String dni) {
 		this.dni = Integer.parseInt(dni);
 		Database.getInstance().createConnection();
 		if (Database.getInstance().count("cliente", "dni = " + dni) == 0)

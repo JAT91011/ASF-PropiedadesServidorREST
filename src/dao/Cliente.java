@@ -1,16 +1,19 @@
-package entities;
+package dao;
+
+import java.util.ArrayList;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class Cliente {
-	private int		dni;
-	private String	nombre;
-	private String	apellido;
-	private String	email;
-	private String	direccion;
-	private int		codigoPostal;
-	private int		telefono;
+	private int					dni;
+	private String				nombre;
+	private String				apellido;
+	private String				email;
+	private String				direccion;
+	private int					codigoPostal;
+	private int					telefono;
+	private ArrayList<Alquiler>	alquileres;
 
 	public Cliente() {
 
@@ -23,6 +26,7 @@ public class Cliente {
 		this.direccion = direccion;
 		this.codigoPostal = codigoPostal;
 		this.telefono = telefono;
+		this.alquileres = new ArrayList<Alquiler>();
 	}
 
 	public Cliente(int dni, String nombre, String apellido, String email, String direccion, int codigoPostal, int telefono) {
@@ -33,6 +37,7 @@ public class Cliente {
 		this.direccion = direccion;
 		this.codigoPostal = codigoPostal;
 		this.telefono = telefono;
+		this.alquileres = new ArrayList<Alquiler>();
 	}
 
 	public int getDni() {
@@ -89,5 +94,13 @@ public class Cliente {
 
 	public void setTelefono(int telefono) {
 		this.telefono = telefono;
+	}
+
+	public ArrayList<Alquiler> getAlquileres() {
+		return alquileres;
+	}
+
+	public void setAlquileres(ArrayList<Alquiler> alquileres) {
+		this.alquileres = alquileres;
 	}
 }

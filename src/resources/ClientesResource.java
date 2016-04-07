@@ -18,11 +18,11 @@ import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import entities.Cliente;
+import dao.Cliente;
 import utilities.Database;
 
-@Path("/clients")
-public class ClientsResource {
+@Path("/clientes")
+public class ClientesResource {
 
 	@Context
 	UriInfo	uriInfo;
@@ -40,6 +40,9 @@ public class ClientsResource {
 			while (rs.next()) {
 				clients.add(new Cliente(rs.getInt("dni"), rs.getString("nombre"), rs.getString("apellido"), rs.getString("email"),
 						rs.getString("direccion"), rs.getInt("cp"), rs.getInt("telefono")));
+				// Se obtienen los alquileres de
+				Database.getInstance().consult("select * from alquiler");
+
 			}
 			Database.getInstance().disconnect();
 			return clients;
@@ -69,7 +72,7 @@ public class ClientsResource {
 	}
 
 	@Path("{dni}")
-	public ClientResource getTodo(@PathParam("dni") String dni) {
-		return new ClientResource(dni);
+	public ClienteResource getTodo(@PathParam("dni") String dni) {
+		return new ClienteResource(dni);
 	}
 }
