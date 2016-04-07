@@ -11,43 +11,69 @@ import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
 
+import entities.Cliente;
+
 public class Test {
-	public static void main(String[] args) {
-		// Creamos una configuración para el Cliente
-		ClientConfig config = new DefaultClientConfig();
-		
-		// Creamos el Cliente y lo inicializamos con la configuración del paso previo
-		Client client = Client.create(config);
-		
-		// Creamos un recurso web inicializado con la url base del proyecto
-		// (http://localhost:8080/de.vogella.jersey.first)
-		WebResource service = client.resource(getBaseURI());
-		
-		// Hacemos la invocación GET solicitando formato TEXT_PLAIN a la uri /rest/hello y
-		// pedimos explícitamente que nos devuelva todo el response para hacerle un toString()
-		System.out.println(service.path("rest").path("hello").accept(
-				MediaType.TEXT_PLAIN).get(ClientResponse.class).toString());
-		
-		// Hacemos la invocación GET solicitando formato TEXT_PLAIN a la uri /rest/hello y
-		// pedimos explícitamente que nos devuelva el String del response
-		System.out.println(service.path("rest").path("hello").accept(
-				MediaType.TEXT_PLAIN).get(String.class));
-
-		// Hacemos la invocación GET solicitando formato TEXT_XML a la uri /rest/hello y
-		// pedimos explícitamente que nos devuelva el String del response
-		System.out.println(service.path("rest").path("hello").accept(
-				MediaType.TEXT_XML).get(String.class));
-
-		// Hacemos la invocación GET solicitando formato TEXT_HTML a la uri /rest/hello y
-		// pedimos explícitamente que nos devuelva el String del response
-		System.out.println(service.path("rest").path("hello").accept(
-				MediaType.TEXT_HTML).get(String.class));
-
-	}
 
 	private static URI getBaseURI() {
-		return UriBuilder.fromUri(
-				"http://localhost:8080/PropiedadesREST").build();
+		return UriBuilder.fromUri("http://localhost:8080/PropiedadesServidorREST/").build();
 	}
 
+	public static void main(String[] args) {
+		ClientConfig config = new DefaultClientConfig();
+		Client client = Client.create(config);
+		WebResource service = client.resource(getBaseURI());
+
+		// INSERTAMOS UNOS CLIENTES DE PRUEBA
+		System.out.println("INSERTAMOS TRES CLIENTES DE PRUEBA");
+		Cliente cl1 = new Cliente(78952922, "Endika", "Salgueiro", "email@email.com", "Calle falsa 1234", 48012, 123456789);
+		Cliente cl2 = new Cliente(12457845, "Jordan", "Aranda", "email@email.com", "Calle falsa 1234", 48012, 123456789);
+		Cliente cl3 = new Cliente(12345678, "Prueba", "Prueba", "email@email.com", "Calle falsa 1234", 48012, 123456789);
+		ClientResponse response = service.path("rest").path("clients").type(MediaType.APPLICATION_JSON).post(ClientResponse.class, cl1);
+		if (response.getStatus() == 201) {
+			System.out.println("Cliente insertado: " + response.getEntity(Cliente.class).toString());
+		} else {
+			System.out.println("Ya existe");
+		}
+		response = service.path("rest").path("clients").type(MediaType.APPLICATION_JSON).post(ClientResponse.class, cl2);
+		if (response.getStatus() == 201) {
+			System.out.println("Cliente insertado: " + response.getEntity(Cliente.class).toString());
+		} else {
+			System.out.println("Ya existe");
+		}
+		response = service.path("rest").path("clients").type(MediaType.APPLICATION_JSON).post(ClientResponse.class, cl3);
+		if (response.getStatus() == 201) {
+			System.out.println("Cliente insertado: " + response.getEntity(Cliente.class).toString());
+		} else {
+			System.out.println("Ya existe");
+		}
+
+		// OBTENEMOS TODOS LOS CLIENTES DE LA BASE DE DATOS Y LOS MOSTRAMOS
+		System.out.println("\nVISUALIZAMOS TODOS LOS CLIENTES DE LA BASE DE DATOS");
+		Cliente[] array = service.path("rest").path("clients").get(Cliente[].class);
+		for (Cliente c : array) {
+			System.out.println(c.toString());
+		}
+
+		// EDITAMOS EL CLIENTE LLAMADO ENDIKA
+		System.out.println("\nEDITAMOS EL CLIENTE 'ENDIKA'");
+		cl1.setNombre("Endika Editado");
+		response = service.path("rest").path("clients").path(Integer.toString(cl1.getDni())).type(MediaType.APPLICATION_JSON)
+				.put(ClientResponse.class, cl1);
+		if (response.getStatus() == 204) {
+			System.out.println("Cliente editado.");
+		} else {
+			System.out.println("No se ha podido editar el cliente");
+		}
+
+		// OBTENEMOS EL CLIENTE EDITADO Y LO MOSTRAMOS
+		System.out.println("\nMOSTRAMOS LOS DATOS DEL CLIENTE 'ENDIKA' TRAS LA EDICIÓN");
+		cl1 = service.path("rest").path("clients").path(Integer.toString(cl1.getDni())).get(Cliente.class);
+		System.out.println(cl1.toString());
+
+		// BORRAMOS EL CLIENTE 3 (EL DE PRUEBA)
+		System.out.println("\nELIMINAMOS EL CLIENTE DE PRUEBA");
+		service.path("rest").path("clients").path(Integer.toString(cl3.getDni())).delete();
+		System.out.println("Cliente '" + cl3.getNombre() + "' borrado correctamente de la base de datos.");
+	}
 }

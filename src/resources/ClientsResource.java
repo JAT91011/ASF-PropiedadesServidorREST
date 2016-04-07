@@ -1,6 +1,8 @@
 package resources;
 
 import java.net.URI;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +19,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import entities.Cliente;
+import utilities.Database;
 
 @Path("/clients")
 public class ClientsResource {
@@ -31,25 +34,38 @@ public class ClientsResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Cliente> getClients() {
 		List<Cliente> clients = new ArrayList<Cliente>();
-		// Obtener desde la BD
-		clients.add(new Cliente(22756156, "Jordan", "Aranda", "jordan.aranda@me.com", "Calle...", 48902, 676909011));
-		clients.add(new Cliente(22756156, "Jordan", "Aranda", "jordan.aranda@me.com", "Calle...", 48902, 676909011));
-		clients.add(new Cliente(22756156, "Jordan", "Aranda", "jordan.aranda@me.com", "Calle...", 48902, 676909011));
-		return clients;
+		try {
+			Database.getInstance().createConnection();
+			ResultSet rs = Database.getInstance().consult("select * from cliente");
+			while (rs.next()) {
+				clients.add(new Cliente(rs.getInt("dni"), rs.getString("nombre"), rs.getString("apellido"), rs.getString("email"),
+						rs.getString("direccion"), rs.getInt("cp"), rs.getInt("telefono")));
+			}
+			Database.getInstance().disconnect();
+			return clients;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return clients;
+		}
 	}
 
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response newClient(Cliente client) {
 		Response res = null;
-		// Comprobar si existe o no en la BD
-		// Si existe:
-		// res = Response.status(409).entity("Post: Todo with " +
-		// client.getDni() + " already exists").build();
-		// Si no existe:
-		URI uri = uriInfo.getAbsolutePathBuilder().path(Integer.toString(client.getDni())).build();
-		res = Response.created(uri).entity(client).build();
-		// Guardar en la BD
+		Database.getInstance().createConnection();
+		if (Database.getInstance().count("cliente", "dni = " + client.getDni()) > 0) {
+			res = Response.status(409).entity("Post: Client with " + client.getDni() + " already exists").build();
+		} else {
+			URI uri = uriInfo.getAbsolutePathBuilder().path(Integer.toString(client.getDni())).build();
+			res = Response.created(uri).entity(client).build();
+			Database.getInstance()
+					.update("insert into cliente values (" + client.getDni() + ", '" + client.getNombre() + "', '" + client.getApellido() + "', '"
+							+ client.getEmail() + "', '" + client.getDireccion() + "', " + client.getCodigoPostal() + ", " + client.getTelefono()
+							+ ")");
+		}
+
+		Database.getInstance().disconnect();
 		return res;
 	}
 
