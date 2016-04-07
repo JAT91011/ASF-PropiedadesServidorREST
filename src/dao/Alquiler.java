@@ -8,6 +8,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Alquiler {
 
 	private int			id;
+	private Cliente		cliente;
 	private Actividad	actividad;
 	private Propiedad	propiedad;
 	private Date		fechaInicio;
@@ -28,6 +29,7 @@ public class Alquiler {
 
 	public Alquiler(int id, Cliente cliente, Actividad actividad, Propiedad propiedad, Date fechaInicio, Date fechaFin, double precio) {
 		this.id = id;
+		this.cliente = cliente;
 		this.actividad = actividad;
 		this.propiedad = propiedad;
 		this.fechaInicio = fechaInicio;
@@ -41,6 +43,14 @@ public class Alquiler {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
 	}
 
 	public Actividad getActividad() {
@@ -85,7 +95,7 @@ public class Alquiler {
 
 	@Override
 	public String toString() {
-		return "Alquiler [id=" + id + ", cliente=" + actividad.toString() + ", propiedad=" + propiedad.toString() + ", fechaInicio=" + fechaInicio
-				+ ", fechaFin=" + fechaFin + ", precio=" + precio + "]";
+		return "Alquiler [id=" + id + ", cliente=" + cliente + ", actividad=" + actividad + ", propiedad=" + propiedad + ", fechaInicio="
+				+ fechaInicio + ", fechaFin=" + fechaFin + ", precio=" + precio + "]";
 	}
 }

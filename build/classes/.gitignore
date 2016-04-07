@@ -1,6 +1,4 @@
-/test/
-/resources/
-/utilities/
-/entities/
-/entitiesDAO/
 /dao/
+/resources/
+/test/
+/utilities/
