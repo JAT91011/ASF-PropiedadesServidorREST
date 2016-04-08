@@ -1,6 +1,6 @@
 package dao;
 
-import java.sql.Date;
+import java.util.Date;
 
 import javax.xml.bind.annotation.XmlRootElement;
 

@@ -4,6 +4,7 @@ import java.net.URI;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -43,8 +44,8 @@ public class AlquileresResource {
 			ResultSet rs = Database.getInstance().consult("select * from alquiler where dniCliente = " + Integer.parseInt(dniCliente));
 			while (rs.next()) {
 				alquileres.add(new Alquiler(rs.getInt("idAlquiler"), getClientePorDni(rs.getInt("dniCliente")),
-						getActividadPorId(rs.getInt("idActividad")), getPropiedadPorId(rs.getInt("idPropiedad")), rs.getDate("fecha_inicio"),
-						rs.getDate("fecha_fin"), rs.getDouble("precio")));
+						getActividadPorId(rs.getInt("idActividad")), getPropiedadPorId(rs.getInt("idPropiedad")),
+						new Date(rs.getLong("fecha_inicio")), new Date(rs.getLong("fecha_fin")), rs.getDouble("precio")));
 			}
 			Database.getInstance().disconnect();
 		} catch (SQLException e) {
@@ -65,8 +66,8 @@ public class AlquileresResource {
 			res = Response.created(uri).entity(alquiler).build();
 			Database.getInstance()
 					.update("insert into alquiler (idPropiedad, dniCliente, idActividad, fecha_inicio, fecha_fin, precio) values ("
-							+ alquiler.getPropiedad().getId() + ", " + alquiler.getCliente().getDni() + ", " + alquiler.getActividad().getId() + ", '"
-							+ alquiler.getFechaInicio() + "', '" + alquiler.getFechaFin() + "', " + alquiler.getPrecio() + ")");
+							+ alquiler.getPropiedad().getId() + ", " + alquiler.getCliente().getDni() + ", " + alquiler.getActividad().getId() + ", "
+							+ alquiler.getFechaInicio().getTime() + ", " + alquiler.getFechaFin().getTime() + ", " + alquiler.getPrecio() + ")");
 		}
 		Database.getInstance().disconnect();
 		return res;

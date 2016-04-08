@@ -36,9 +36,9 @@ public class AlquilerResource {
 			res = Response.noContent().build();
 			Database.getInstance()
 					.update("update alquiler set idPropiedad = " + alquiler.getPropiedad().getId() + ", dniCliente = "
-							+ alquiler.getCliente().getDni() + ", idActividad = " + alquiler.getActividad().getId() + ", fecha_inicio = '"
-							+ alquiler.getFechaInicio() + "', fecha_fin = " + alquiler.getFechaFin() + ", precio = " + alquiler.getPrecio()
-							+ " where idAlquiler = " + id);
+							+ alquiler.getCliente().getDni() + ", idActividad = " + alquiler.getActividad().getId() + ", fecha_inicio = "
+							+ alquiler.getFechaInicio().getTime() + ", fecha_fin = " + alquiler.getFechaFin().getTime() + ", precio = "
+							+ alquiler.getPrecio() + " where idAlquiler = " + id);
 		}
 		Database.getInstance().disconnect();
 		return res;
