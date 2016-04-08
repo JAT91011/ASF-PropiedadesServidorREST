@@ -70,7 +70,7 @@ public class ClientesResource {
 	}
 
 	@Path("{dni}")
-	public ClienteResource getTodo(@PathParam("dni") String dni) {
+	public ClienteResource getCliente(@PathParam("dni") String dni) {
 		return new ClienteResource(dni);
 	}
 }

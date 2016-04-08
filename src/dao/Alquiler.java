@@ -1,13 +1,14 @@
 package dao;
 
-import java.util.Date;
+import java.sql.Date;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class Alquiler {
 
-	private int			id;
+	private int			idAlquiler;
+	private Cliente		cliente;
 	private Actividad	actividad;
 	private Propiedad	propiedad;
 	private Date		fechaInicio;
@@ -18,7 +19,8 @@ public class Alquiler {
 
 	}
 
-	public Alquiler(Actividad actividad, Propiedad propiedad, Date fechaInicio, Date fechaFin, double precio) {
+	public Alquiler(Cliente cliente, Actividad actividad, Propiedad propiedad, Date fechaInicio, Date fechaFin, double precio) {
+		this.cliente = cliente;
 		this.actividad = actividad;
 		this.propiedad = propiedad;
 		this.fechaInicio = fechaInicio;
@@ -26,8 +28,9 @@ public class Alquiler {
 		this.precio = precio;
 	}
 
-	public Alquiler(int id, Cliente cliente, Actividad actividad, Propiedad propiedad, Date fechaInicio, Date fechaFin, double precio) {
-		this.id = id;
+	public Alquiler(int idAlquiler, Cliente cliente, Actividad actividad, Propiedad propiedad, Date fechaInicio, Date fechaFin, double precio) {
+		this.idAlquiler = idAlquiler;
+		this.cliente = cliente;
 		this.actividad = actividad;
 		this.propiedad = propiedad;
 		this.fechaInicio = fechaInicio;
@@ -35,12 +38,20 @@ public class Alquiler {
 		this.precio = precio;
 	}
 
-	public int getId() {
-		return id;
+	public int getIdAlquiler() {
+		return idAlquiler;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setIdAlquiler(int idAlquiler) {
+		this.idAlquiler = idAlquiler;
+	}
+
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
 	}
 
 	public Actividad getActividad() {
@@ -85,7 +96,7 @@ public class Alquiler {
 
 	@Override
 	public String toString() {
-		return "Alquiler [id=" + id + ", cliente=" + actividad.toString() + ", propiedad=" + propiedad.toString() + ", fechaInicio=" + fechaInicio
-				+ ", fechaFin=" + fechaFin + ", precio=" + precio + "]";
+		return "Alquiler [idAlquiler=" + idAlquiler + ", cliente=" + cliente + ", actividad=" + actividad + ", propiedad=" + propiedad
+				+ ", fechaInicio=" + fechaInicio + ", fechaFin=" + fechaFin + ", precio=" + precio + "]";
 	}
 }
